@@ -1,0 +1,77 @@
+=========================后端发出指令=========================
+
+
+//------------------------配置指令---------------------------
+后端发出的所有指令格式均要求为: >${指令}.#
+
+"set debug"  						//设置调试模式 >set debug=65535.#
+"set 4g config"  					//配置4G模块  >set 4g config|${ProductKey}|${DeviceName}|${DeviceSecret}|${regionId}.#
+"set up time"  						//设置挡板抬起时间（单位分钟） >set up time=10.# 设置10分钟抬起
+"set pla time"  					//设置设备主动问答平台间隔时间（分钟）
+"set motor time" 					//设置挡板运动时间（单位秒） >set motor time=20.# 设置翻版运动20秒 上下对称
+"set back time"						//设置挡板回退时间（单位秒） >set back time=1.# 设置翻版回退运动1秒 
+"set log"  							//设置日志输出 >set log=65535.#
+"set run1"  	  					//运行备份的程序
+"set run2"  	  					//运行更新的程序
+
+
+//------------------------逻辑指令---------------------------
+"set start order"  					//开始计费指令（开始计费挡板抬起）
+"set end order"  					//结束计费指令（结束计费挡板下降）
+"set start reserve"  				//开始预约指令（挡板抬起）>set start reserve=30.#
+"set end reserve"  					//结束预约指令（挡板下降）
+"set normal"           				//平台回复正常运行（平台下发状态）
+"set order time"  					//平台回复订单创建成功
+
+//------------------------状态指令---------------------------
+
+"get car status"  					//获取车位当前装态  
+"get config"						//获取配置参数
+
+
+=========================设备发出消息=========================
+
+//------------------------控制输出---------------------------
+"data:baffle down "  				//挡板放下
+"data:baffle up "  					//挡板升起
+"data:baffle stop "  				//挡板停止
+"data:4g config "  					//配置4G模块
+
+
+//------------------------状态输出---------------------------
+"data:car=%d:dist=%d:ultc1=%d:ultc2=%d:temp=%d " 	//获取设备状态
+"data:temp=%d "  									//获取设备温度
+"data:car_status=%d "   							//获取车位状态  0表示空  1表示有车 2表示异常
+"data:car_up_status=%d "   							//主动上报车位状态  0表示空  1表示有车 2表示异常
+"data:config--run=%d--up=%d--pla:%d--debug=%d--log=%d--4G=%d--motor=%d--back=%d "   		       
+													//参数临时存储 	0.程序运行模式 1.翻版抬起时间 2.平台主动应答间隔时间 3.程序模式调试 
+																	4.日志输出模式 0xFFFF不输出,5.4G模块是否配置 0xFFFF 未配置,6.翻版上下的时间,
+																	7.翻版回转的时间
+"data:start order "  								//开始订单计费
+"data:end order "  									//订单结束计费
+
+"data:start reserve=%d "  			     			//开始预约
+"data:reserve error"  								//预约失败
+"data:end reserve "  								//结束预约
+
+"data:order time "   								//平台订单成功成功 
+"data:start run " 									//设备开始运行
+"data:run status=%d " 								//设备询问通信是否正常（平台回复 set normal ）
+
+//------------------------配置输出---------------------------
+"data:set debug=%d "  								//配置调试模式输出
+"data:set up time=%d "  							//设置检测到车辆挡板抬起时间输出
+"data:set pla run=%d "  							//设置设备主动问答平台间隔时间（分钟）输出
+"data:set motor time=%d " 							//设置翻版运动时间
+"data:set back time=%d " 							//设置翻版回退运动时间
+"data:set log=%d "  								//配置日志输出 
+
+
+//------------------------异常输出---------------------------
+"data:error order "   								//订单计费但车辆异常消失
+"data:error ult=%d "   		 						//超声波异常
+
+"data:error up "   		 							//挡板上升异常
+"data:error down "   								//挡板下降异常
+
+"data:error water=%d " 
