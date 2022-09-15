@@ -4,6 +4,8 @@
 //------------------------配置指令---------------------------
 后端发出的所有指令格式均要求为: >${指令}.#
 
+[callback] ：表示后端发出指令，设备收到之后会原样回复一条确认收到
+
 "set debug"  						//设置调试模式 >set debug=65535.#
 "set 4g config"  					//配置4G模块  >set 4g config|${ProductKey}|${DeviceName}|${DeviceSecret}|${regionId}.#
 "set up time"  						//设置挡板抬起时间（单位分钟） >set up time=10.# 设置10分钟抬起
@@ -16,12 +18,12 @@
 
 
 //------------------------逻辑指令---------------------------
-"set start order"  					//开始计费指令（开始计费挡板抬起）
-"set end order"  					//结束计费指令（结束计费挡板下降）
-"set start reserve"  				//开始预约指令（挡板抬起）>set start reserve=30.#
-"set end reserve"  					//结束预约指令（挡板下降）
-"set normal"           				//平台回复正常运行（平台下发状态）
-"set order time"  					//平台回复订单创建成功
+"set start order"  					//开始计费指令（开始计费挡板抬起） 					[callback] （后端不应该使用这条命令
+"set end order"  					//结束计费指令（结束计费挡板下降）						[callback]
+"set start reserve"  				//开始预约指令（挡板抬起）>set start reserve=30.#		[callback]
+"set end reserve"  					//结束预约指令（挡板下降）								[callback]
+"set normal"           				//平台回复正常运行（平台下发状态）		
+"set order time"  					//平台回复订单创建成功								[callback]
 
 //------------------------状态指令---------------------------
 
@@ -47,7 +49,7 @@
 													//参数临时存储 	0.程序运行模式 1.翻版抬起时间 2.平台主动应答间隔时间 3.程序模式调试 
 																	4.日志输出模式 0xFFFF不输出,5.4G模块是否配置 0xFFFF 未配置,6.翻版上下的时间,
 																	7.翻版回转的时间
-"data:start order "  								//开始订单计费
+"data:start order "  								//开始订单计费 (车位检测到有车 将消息发送给设备平台)
 "data:end order "  									//订单结束计费
 
 "data:start reserve=%d "  			     			//开始预约
