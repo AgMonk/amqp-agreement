@@ -53,7 +53,7 @@
 "data:end order "  									//订单结束计费
 
 "data:start reserve=%d "  			     			//开始预约
-"data:reserve error"  								//预约失败 （水泡时，或有车，抬起？）
+"data:reserve error"  								//预约失败 （水泡时，或有车）
 "data:end reserve "  								//结束预约
 
 "data:order time "   								//平台订单成功成功 
