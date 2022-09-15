@@ -6,45 +6,45 @@
 
 [callback] ：表示后端发出指令，设备收到之后会原样回复一条确认收到
 
-"set debug"  						//设置调试模式 >set debug=65535.#
+"set debug"        					//设置调试模式 >set debug=65535.# 为65535是正常模式，别的都为调试模式
 "set 4g config"  					//配置4G模块  >set 4g config|${ProductKey}|${DeviceName}|${DeviceSecret}|${regionId}.#
-"set up time"  						//设置挡板抬起时间（单位分钟） >set up time=10.# 设置10分钟抬起
-"set pla time"  					//设置设备主动问答平台间隔时间（分钟）
-"set motor time" 					//设置挡板运动时间（单位秒） >set motor time=20.# 设置翻版运动20秒 上下对称
-"set back time"						//设置挡板回退时间（单位秒） >set back time=1.# 设置翻版回退运动1秒 
-"set log"  							//设置日志输出 >set log=65535.#
-"set run1"  	  					//运行备份的程序
-"set run2"  	  					//运行更新的程序
+"set up time"  						//设置挡板抬起时间（单位分钟） >set up time=10.# 设置10分钟抬起 （免费时长）
+"set pla time"  					//设置设备主动问答平台间隔时间（分钟）  （设备主动上报状态的间隔）
+"set motor time" 					//设置挡板运动时间（单位秒） >set motor time=20.# 设置翻版运动20秒 上下对称  （电机向抬起方向转动指定秒数）
+"set back time"						//设置挡板回退时间（单位秒） >set back time=1.# 设置翻版回退运动1秒  （ 电机向降下方向转动指定秒数）
+"set log"         					//设置日志输出 >set log=65535.# 为65535是不输出日志 ，别的都输出日志
+"set run1"  	  					//运行"备份"的程序
+"set run2"  	  					//运行"更新"的程序
 
 
 //------------------------逻辑指令---------------------------
 "set start order"  					//开始计费指令（开始计费挡板抬起） 					[callback] （后端不应该使用这条命令
 "set end order"  					//结束计费指令（结束计费挡板下降）						[callback]
-"set start reserve"  				//开始预约指令（挡板抬起）>set start reserve=30.#		[callback]
-"set end reserve"  					//结束预约指令（挡板下降）								[callback]
+"set start reserve"  				//开始预约指令（挡板抬起）>set start reserve=30.#		[callback] （分钟
+"set end reserve"  					//预约签到指令（挡板下降）								[callback]
 "set normal"           				//平台回复正常运行（平台下发状态）		
 "set order time"  					//平台回复订单创建成功								[callback]
 
 //------------------------状态指令---------------------------
 
 "get car status"  					//获取车位当前装态  
-"get config"						//获取配置参数
+"get config"						//获取配置参数 ，返回 config--run=0--up=5--pla:2--debug=65535--log=65535--4G=4369--motor=22--back=1
 
 
 =========================设备发出消息=========================
 
 //------------------------控制输出---------------------------
-"data:baffle down "  				//挡板放下
-"data:baffle up "  					//挡板升起
-"data:baffle stop "  				//挡板停止
+"data:baffle down "  				//挡板放下（调试模式）
+"data:baffle up "  					//挡板升起（调试模式）
+"data:baffle stop "  				//挡板停止（调试模式）
 "data:4g config "  					//配置4G模块
 
 
 //------------------------状态输出---------------------------
-"data:car=%d:dist=%d:ultc1=%d:ultc2=%d:temp=%d " 	//获取设备状态
-"data:temp=%d "  									//获取设备温度
-"data:car_status=%d "   							//获取车位状态  0表示空  1表示有车 2表示异常
-"data:car_up_status=%d "   							//主动上报车位状态  0表示空  1表示有车 2表示异常
+"data:car=%d:dist=%d:ultc1=%d:ultc2=%d:temp=%d " 	//获取设备状态 （未实现）
+"data:temp=%d "  									//获取设备温度 （未实现）
+"data:car_status=%d "   							//发送 get car status时返回：车位状态  0表示空  1表示有车 2表示异常
+"data:car_up_status=%d "   							//主动上报					车位状态  0表示空  1表示有车 2表示异常
 "data:config--run=%d--up=%d--pla:%d--debug=%d--log=%d--4G=%d--motor=%d--back=%d "   		       
 													//参数临时存储 	0.程序运行模式 1.翻版抬起时间 2.平台主动应答间隔时间 3.程序模式调试 
 																	4.日志输出模式 0xFFFF不输出,5.4G模块是否配置 0xFFFF 未配置,6.翻版上下的时间,
@@ -53,7 +53,7 @@
 "data:end order "  									//订单结束计费
 
 "data:start reserve=%d "  			     			//开始预约
-"data:reserve error"  								//预约失败
+"data:reserve error"  								//预约失败 （水泡时，或有车，抬起？）
 "data:end reserve "  								//结束预约
 
 "data:order time "   								//平台订单成功成功 
@@ -71,9 +71,10 @@
 
 //------------------------异常输出---------------------------
 "data:error order "   								//订单计费但车辆异常消失
-"data:error ult=%d "   		 						//超声波异常
+"data:error ult=%d "  								//超声波错误代码 0正常，1超声波1损坏，2超声波2损坏，
+																	3两个超声波均损坏，4超声波1被压住，5超声波2被压住，6两个超声波均被压住
 
-"data:error up "   		 							//挡板上升异常
-"data:error down "   								//挡板下降异常
+"data:error up "   		 							//挡板上升异常(废弃)
+"data:error down "   								//挡板下降异常(废弃)
 
-"data:error water=%d " 
+"data:error water=%d "								//0未泡水 1泡水 根本没有泡水监测，只会返回0
