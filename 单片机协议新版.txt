@@ -44,10 +44,10 @@
 "confirm debug=65535"			//进入调试模式
 "confirm debug=0"				//退出调试模式
 "confirm 4g 参数"				//确认4G模块，参数格式为 ${ProductKey}|${DeviceName}|${DeviceSecret}|${regionId}
-"confirm report time=%d"		//确认设备主动上报信息的间隔（分钟）
-"confirm free time=%d"			//确认免费时长（从车进入到开始计费的时长，分钟）
-"confirm motor time=%d"			//确认挡板升起时，电机转动的秒数 （后端不做实现）
-"confirm back time=%d"			//确认挡板回退时，电机转动的秒数 （后端不做实现）
+"confirm report=%d"				//确认设备主动上报信息的间隔（分钟）
+"confirm free=%d"				//确认免费时长（从车进入到开始计费的时长，分钟）
+"confirm motor=%d"				//确认挡板升起时，电机转动的秒数 （后端不做实现）
+"confirm back=%d"				//确认挡板回退时，电机转动的秒数 （后端不做实现）
 "confirm log=65535"				//确认关闭日志输出
 "confirm log=0"					//确认开启日志输出
 
